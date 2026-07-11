@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>События - 024ИС</title>
+</head>
+<body>
+    <header class="header">
+        <div class="container nav-container">
+            <div class="logo"><img src="logo-024is.png" alt="Логотип"></div>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a href="events.html">События</a>
+                <a href="gallery.html">Галерея</a>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙 Тема</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="section-title fade-in">Календарь событий</h2>
+        <div class="calendar-container fade-in">
+            <div class="calendar-header">Апрель 2026</div>
+            <div class="calendar-grid">
+                <div class="day-name">Пн</div><div class="day-name">Вт</div><div class="day-name">Ср</div><div class="day-name">Чт</div><div class="day-name">Пт</div><div class="day-name">Сб</div><div class="day-name">Вс</div>
+                <div class="day empty"></div><div class="day empty"></div>
+                <div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day">5</div>
+                <div class="day">6</div><div class="day active">7</div><div class="day">8</div><div class="day">9</div><div class="day">10</div><div class="day">11</div><div class="day">12</div>
+                <div class="day">13</div><div class="day">14</div><div class="day">15</div><div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div>
+                <div class="day">20</div><div class="day">21</div><div class="day">22</div><div class="day">23</div><div class="day">24</div><div class="day">25</div><div class="day active">26</div>
+                <div class="day active">27</div><div class="day">28</div><div class="day">29</div><div class="day">30</div>
+            </div>
+        </div>
+
+        <h2 class="section-title fade-in">Ближайшие события</h2>
+        
+        <div class="event-card fade-in">
+            <div class="event-photo">
+                <img src="ИЛЬДАР.jpg" alt="Ильдар">
+            </div>
+            <div class="event-text">
+                <strong>7 апреля</strong>
+                <span>День рождения лучшего старосты Ильдара!</span>
+            </div>
+        </div>
+        
+        <div class="event-card fade-in">
+            <div class="event-photo">
+                <img src="curator.jpg" alt="Эльвира Фавадимовна">
+            </div>
+            <div class="event-text">
+                <strong>26 апреля</strong>
+                <span>День рождения нашего любимого куратора Эльвиры Фавадимовны!</span>
+            </div>
+        </div>
+        
+        <div class="event-card fade-in">
+            <div class="event-photo">
+                <img src="Студент 15.png" alt="Алсу">
+            </div>
+            <div class="event-text">
+                <strong>27 апреля</strong>
+                <span>День рождения Алсу!</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container nav-container">
+            <div class="logo"><img src="logo-024is.png" alt="Логотип"></div>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a href="events.html">События</a>
+                <a href="gallery.html">Галерея</a>
+            </nav>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2026 Группа 024ИС. Сделано с душой.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            const btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = next === 'dark' ? '☀️ Тема' : '🌙 Тема';
+        }
+        (function initTheme() {
+            const saved = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+            const btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = saved === 'dark' ? '☀️ Тема' : '🌙 Тема';
+        })();
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

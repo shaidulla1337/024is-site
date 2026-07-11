@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Группа 024ИС - Главная</title>
+</head>
+<body>
+    <header class="header">
+        <div class="container nav-container">
+            <div class="logo"><img src="logo-024is.png" alt="Логотип 024ИС"></div>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a href="events.html">События</a>
+                <a href="gallery.html">Галерея</a>
+                <a href="album.html">📖 Альбом</a>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему">🌙 Тема</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero-slider" id="heroSlider">
+        <div class="slide active" style="background-image: url('ФОТО ГЛАВ.jpg')">
+            <div class="slide-overlay"><h1>Добро пожаловать<br>в группу 024 ИС</h1></div>
+        </div>
+        <div class="slide" style="background-image: url('group-photo.jpg')">
+            <div class="slide-overlay"><h1>Мы — команда!<br>024ИС</h1></div>
+        </div>
+        <div class="slide" style="background-image: url('image_22.jpg')">
+            <div class="slide-overlay"><h1>Лучшие моменты<br>вместе</h1></div>
+        </div>
+        <div class="slide" style="background-image: url('image_26.jpg')">
+            <div class="slide-overlay"><h1>Спорт и дружба<br>024ИС</h1></div>
+        </div>
+        <div class="slider-dots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
+        </div>
+    </div>
+
+    <main class="container">
+        <h2 class="section-title fade-in">Студенты</h2>
+        
+        <div class="search-box fade-in">
+            <input type="text" id="studentSearch" placeholder="🔍 Найти студента по имени..." oninput="filterStudents()">
+        </div>
+
+        <div class="student-grid" id="studentGrid">
+            <div class="student-card fade-in" onclick="openModal('modal1')">
+                <img src="Студент 1.png" alt="Раиль" loading="lazy">
+                <div class="student-name">Раиль ♎</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal2')">
+                <img src="Студент 2.png" alt="Миляуша" loading="lazy" onerror="this.parentElement.style.display='none'">
+                <div class="student-name">Миляуша ♏</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal3')">
+                <img src="Студент 3.png" alt="Ильназ" loading="lazy">
+                <div class="student-name">Ильназ</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal4')">
+                <img src="Студент 4.png" alt="Данияр" loading="lazy">
+                <div class="student-name">Данияр ♈</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal5')">
+                <img src="Студент 5.png" alt="Рамис" loading="lazy">
+                <div class="student-name">Рамис ♓</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal6')">
+                <img src="Студент 6.png" alt="Альмир" loading="lazy">
+                <div class="student-name">Альмир ♋</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal7')">
+                <img src="Студент 7.png" alt="Резеда" loading="lazy">
+                <div class="student-name">Резеда ♍</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal8')">
+                <img src="Студент 8.png" alt="Реналь" loading="lazy">
+                <div class="student-name">Реналь ♍</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal9')">
+                <img src="Студент 9.png" alt="Ильсияр" loading="lazy">
+                <div class="student-name">Ильсияр ♍</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal10')">
+                <img src="Студент 10.png" alt="Денис" loading="lazy">
+                <div class="student-name">Денис ♊</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal11')">
+                <img src="Студент 11.png" alt="Артём" loading="lazy">
+                <div class="student-name">Артём ♊</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal12')">
+                <img src="Студент 12.png" alt="Гамиль" loading="lazy">
+                <div class="student-name">Гамиль ♊</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal13')">
+                <img src="Студент 13.png" alt="Ильдар" loading="lazy">
+                <div class="student-name">Ильдар ♈</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal14')">
+                <img src="Студент 14.png" alt="Ильнара" loading="lazy">
+                <div class="student-name">Ильнара ♍</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal15')">
+                <img src="Студент 15.png" alt="Алсу" loading="lazy">
+                <div class="student-name">Алсу ♊</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal16')">
+                <img src="Студент 16.png" alt="Тимур" loading="lazy">
+                <div class="student-name">Тимур ♎</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal17')">
+                <img src="Студент 17.png" alt="Рузиль" loading="lazy">
+                <div class="student-name">Рузиль ♐</div>
+            </div>
+            <div class="student-card fade-in" onclick="openModal('modal18')">
+                <img src="Студент 18.png" alt="Регина" loading="lazy">
+                <div class="student-name">Регина ♋</div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+            <div class="modal-window">
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+                <img id="modalImg" src="" alt="" class="modal-img">
+                <h2 id="modalTitle"></h2>
+                <p id="modalDesc"></p>
+            </div>
+        </div>
+
+        <h2 class="section-title fade-in">Самый лучший куратор</h2>
+        <div class="curator-card fade-in">
+            <div class="curator-photo-wrap">
+                <img src="curator.jpg" alt="Эльвира Фавадимовна">
+            </div>
+            <div class="curator-info">
+                Анварова Эльвира Фавадимовна ♉ — лучший куратор и педагог нашего техникума. 
+                Она преподаёт математику и информатику. Это человек, который искренне 
+                любит своё дело и заботится о каждом студенте в своей группе.
+                <p>Цитата: <em>"Үз-үзен хөрмәт иткән кеше, башкаларны да хөрмәт итә!"</em></p>
+            </div>
+        </div>
+
+        <section id="letter" class="letter-section fade-in">
+            <h2 class="section-title">Слова куратору</h2>
+            <div class="letter-card">
+                <div class="letter-header">Дорогая Эльвира Фавадимовна!</div>
+                <div class="letter-body">
+                    <p>Вы однажды писали: <em>«Может быть, спустя какое-то время и мои студенты когда-нибудь напишут так же обо мне. Очень надеюсь, что мои старанья не пропадут напрасно».</em></p>
+                    <p>Так вот, мы пишем это, чтобы сказать Вам главное: Вы точно старались не зря.
+Мы каждый учебный день видим, как Вы преподаёте. Вы из тех, кто будет объяснять до тех пор, пока до каждого не дойдёт. Если кто-то не уловил смысл с первого раза — Вы найдёте другие слова, приведёте новые примеры, буквально раскидаете всё «на пальцах». За ошибки Вы не ругаете сильно, хотя можете метко подшутить или в шутку пригрозить двойкой. Но мы-то знаем, что цель у Вас одна — чтобы мы реально разобрались в теме. А если вопрос попадается трудный, Вы разбираете его спокойно и максимально вдумчиво.
+Да, у Вас есть характер. Вы можете вспыхнуть или разозлиться из-за какой-то мелочи, но только потому, что Вам искренне не всё равно. И это проходит так же быстро, как и начинается. По натуре Вы очень энергичный и добрый человек. У Вас приятный голос, и с Вами просто легко общаться.
+Как куратор — Вы для нас абсолютно лучшая. Вы интересуетесь нашими делами, переживаете за нас, помогаете выкручиваться из проблем. Даже если вопрос вообще не касается Вашей работы, Вы всё равно не остаётесь в стороне и пытаетесь помочь. Мы всё это видим и всегда будем помнить.
+Мы очень ценим, что Вы понимаете нас с полуслова. Нам не нужно долго и нудно объяснять, что мы чувствуем — Вы и так всё прекрасно считываете. У Вас есть дар объяснять сложные вещи простым языком, и благодаря этому мы учимся и совершенно не боимся задавать вопросы.
+А ещё мы замечаем, как Вы много жестикулируете во время разговора. И Ваша особая суперспособность: Вы умеете рассказывать что-то с такой уверенностью, что мы верим каждому слову, а потом только понимаем, что нас слегка и по-доброму обвели вокруг пальца. Это тоже Ваш особенный талант!
+Главное, что мы хотим донести: все Ваши труды, нервы и время точно не пропали зря. Мы помним Вашу заботу, Ваше бесконечное терпение и доброту. Огромное спасибо за всё, что Вы для нас делаете. Мы Вас очень ценим.</p>
+                </div>
+                <div class="letter-footer">
+                    <span class="heart">♥</span>
+                    С любовью, группа 024ИС
+                </div>
+            </div>
+        </section>
+
+        <div class="fade-in" style="text-align: center; margin: 40px 0; padding: 20px; border: 2px dashed var(--border); border-radius: 30px;">
+            <strong style="color: var(--primary); font-size: 1.2rem;">💬 Цитата дня:</strong>
+            <p id="dailyQuote" style="margin-top: 10px; font-style: italic; color: var(--text);"></p>
+        </div>
+    </main>
+
+    <!-- Улучшенная форма обратной связи -->
+    <section id="contact-form" class="letter-section fade-in">
+        <h2 class="section-title">Написать мне</h2>
+        <div class="letter-card" style="padding: 40px;">
+            <form id="tg-form" style="display: flex; flex-direction: column; gap: 15px; max-width: 500px; margin: 0 auto;">
+                <div style="display: flex; flex-direction: column; text-align: left; gap: 5px;">
+                    <label style="font-weight: bold; color: var(--primary-dark);">Ваше имя:</label>
+                    <input type="text" id="tg-name" required style="padding: 10px; border: 2px solid var(--border); border-radius: 15px; background: var(--card-bg); color: var(--text);">
+                </div>
+                
+                <div style="display: flex; flex-direction: column; text-align: left; gap: 5px;">
+                    <label style="font-weight: bold; color: var(--primary-dark);">Ваш Email:</label>
+                    <input type="email" id="tg-email" required style="padding: 10px; border: 2px solid var(--border); border-radius: 15px; background: var(--card-bg); color: var(--text);">
+                </div>
+                
+                <div style="display: flex; flex-direction: column; text-align: left; gap: 5px;">
+                    <label style="font-weight: bold; color: var(--primary-dark);">Сообщение:</label>
+                    <textarea id="tg-message" rows="5" required style="padding: 10px; border: 2px solid var(--border); border-radius: 15px; background: var(--card-bg); color: var(--text); resize: vertical;"></textarea>
+                </div>
+                
+                <!-- Кнопка вызова JS функции -->
+                <button type="button" onclick="sendTelegramMessage()" style="margin-top: 10px; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.2s;">
+                    Отправить сообщение
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container nav-container">
+            <div class="logo"><img src="logo-024is.png" alt="Логотип"></div>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a href="events.html">События</a>
+                <a href="gallery.html">Галерея</a>
+            </nav>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2026 Группа 024ИС. Сделано с душой.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Тема
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            document.querySelector('.theme-toggle').textContent = next === 'dark' ? '☀️ Тема' : '🌙 Тема';
+        }
+        (function initTheme() {
+            const saved = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+            const btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = saved === 'dark' ? '☀️ Тема' : '🌙 Тема';
+        })();
+
+        // Слайдер
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        function goToSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = n;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+        function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
+        setInterval(nextSlide, 5000);
+
+        // Модалки
+        const studentsData = {
+            modal1: { name: 'Раиль ♎', img: 'Студент 1.png', desc: 'Хороший друг, который поможет в трудную минуту.' },
+            modal2: { name: 'Миляуша ♏', img: 'Студент 2.png', desc: 'Стеснительная, но очень добрая.' },
+            modal3: { name: 'Ильназ', img: 'Студент 3.png', desc: 'Сонный, но всегда на высоте, когда нужно.' },
+            modal4: { name: 'Данияр ♈', img: 'Студент 4.png', desc: 'Крутой и надёжный парень.' },
+            modal5: { name: 'Рамис ♓', img: 'Студент 5.png', desc: 'Смешной — с ним никогда не скучно.' },
+            modal6: { name: 'Альмир ♋', img: 'Студент 6.png', desc: 'Энергичный и полный идей.' },
+            modal7: { name: 'Резеда ♍', img: 'Студент 7.png', desc: 'Капкан.' },
+            modal8: { name: 'Реналь ♍', img: 'Студент 8.png', desc: 'Хороший собеседник и слушатель.' },
+            modal9: { name: 'Ильсияр ♍', img: 'Студент 9.png', desc: 'Агрессивная? 100%!' },
+            modal10: { name: 'Денис ♊', img: 'Студент 10.png', desc: 'Спокойный и надёжный товарищ.' },
+            modal11: { name: 'Артём ♊', img: 'Студент 11.png', desc: 'Весёлый и жизнерадостный.' },
+            modal12: { name: 'Гамиль ♊', img: 'Студент 12.png', desc: 'Легенда группы в прямом смысле.' },
+            modal13: { name: 'Ильдар ♈', img: 'Студент 13.png', desc: 'Хороший друг и лучший староста.' },
+            modal14: { name: 'Ильнара ♍', img: 'Студент 14.png', desc: 'Творческая натура.' },
+            modal15: { name: 'Алсу ♊', img: 'Студент 15.png', desc: 'Добрая и приветливая.' },
+            modal16: { name: 'Тимур ♎', img: 'Студент 16.png', desc: 'Спортивный и целеустремлённый.' },
+            modal17: { name: 'Рузиль ♐', img: 'Студент 17.png', desc: 'Уверенный в себе и смелый.' },
+            modal18: { name: 'Регина ♋', img: 'Студент 18.png', desc: 'Умная и начитанная.' }
+        };
+        function openModal(id) {
+            const data = studentsData[id];
+            if (!data) return;
+            document.getElementById('modalImg').src = data.img;
+            document.getElementById('modalImg').alt = data.name;
+            document.getElementById('modalTitle').textContent = data.name;
+            document.getElementById('modalDesc').textContent = data.desc;
+            document.getElementById('modalOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        function closeModalOutside(e) {
+            if (e.target === document.getElementById('modalOverlay')) closeModal();
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        // Поиск
+        function filterStudents() {
+            const query = document.getElementById('studentSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.student-card');
+            cards.forEach(card => {
+                const name = card.querySelector('.student-name').textContent.toLowerCase();
+                card.classList.toggle('hidden', !name.includes(query));
+            });
+        }
+
+        // Анимации при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Цитата дня
+        const quotes = ["1", "2", "3", "4", "5"];
+        document.getElementById('dailyQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+        // Функция отправки сообщений в Telegram
+        function sendTelegramMessage() {
+            const token = "8949788239:AAF7gj9RbmKzMs_3CFmz9L_LadFwLvriY_s";
+            const chatId = "5125670074";
+            
+            const name = document.getElementById('tg-name').value.trim();
+            const email = document.getElementById('tg-email').value.trim();
+            const message = document.getElementById('tg-message').value.trim();
+            
+            if (!name || !email || !message) {
+                alert('Пожалуйста, заполните все поля формы!');
+                return;
+            }
+            
+            const text = `📩 **Новое сообщение с сайта!**\n\n👤 **Отправитель:** ${name}\n📧 **Email:** ${email}\n💬 **Текст:** ${message}`;
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    parse_mode: 'Markdown',
+                    text: text
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Сообщение успешно отправлено в Telegram!');
+                    document.getElementById('tg-form').reset();
+                } else {
+                    alert('Ошибка при отправке в Telegram.');
+                }
+            })
+            .catch(err => alert('Ошибка сети: ' + err));
+        }
+    </script>
+</body>
+</html>
