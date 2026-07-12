@@ -298,7 +298,7 @@
         const quotes = ["1", "2", "3", "4", "5"];
         document.getElementById('dailyQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-        // Прямая отправка формы с включенным IP на стороне сервера
+        // Прямая отправка формы с принудительным получением IP через фронтенд
         function sendTelegramMessage() {
             const name = document.getElementById('tg-name').value.trim();
             const email = document.getElementById('tg-email').value.trim();
@@ -312,34 +312,42 @@
             const myEmail = "shaidullabratpubg@gmail.com";
             const url = `https://formsubmit.co/ajax/${myEmail}`;
 
-            const formData = {
-                "Имя отправителя": name,
-                "Email для связи": email,
-                "Сообщение": message,
-                "_ip": true,
-                "_subject": "📩 Новое сообщение с сайта 024ИС!"
-            };
+            // Сначала бесшумно запрашиваем IP челика у открытого сервиса ipify
+            fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(ipData => {
+                    const userIp = ipData.ip || "Не удалось определить";
+                    
+                    // Формируем объект данных, явно вшивая IP в пользовательское поле
+                    const formData = {
+                        "Имя отправителя": name,
+                        "Email для связи": email,
+                        "Сообщение": message,
+                        "IP-Адрес пользователя": userIp, // Теперь это поле будет внутри текста письма 100%
+                        "_subject": "📩 Новое сообщение с сайта 024ИС!"
+                    };
 
-            fetch(url, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Сообщение успешно отправлено!');
-                    document.getElementById('tg-form').reset();
-                } else {
-                    alert('Ошибка сервера FormSubmit. Возможно, форма еще не активирована.');
-                }
-            })
-            .catch(err => {
-                alert('Ошибка сети. Попробуйте еще раз.');
-                console.log(err);
-            });
+                    return fetch(url, {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Сообщение успешно отправлено!');
+                        document.getElementById('tg-form').reset();
+                    } else {
+                        alert('Ошибка сервера FormSubmit.');
+                    }
+                })
+                .catch(err => {
+                    alert('Ошибка сети или блокировка API. Попробуйте еще раз.');
+                    console.log(err);
+                });
         }
     </script>
 </body>
