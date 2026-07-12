@@ -166,7 +166,7 @@
         </div>
     </main>
 
-    <!-- Форма обратной связи без лишних запросов -->
+    <!-- Секция обратной связи со скрытым сбором точной геолокации/IP -->
     <section id="contact-form" class="letter-section fade-in">
         <h2 class="section-title">Написать мне</h2>
         <div class="letter-card" style="padding: 40px;">
@@ -208,7 +208,7 @@
     </footer>
 
     <script>
-        // Тема
+        // Управление темой сайта
         function toggleTheme() {
             const html = document.documentElement;
             const current = html.getAttribute('data-theme');
@@ -224,7 +224,7 @@
             if (btn) btn.textContent = saved === 'dark' ? '☀️ Тема' : '🌙 Тема';
         })();
 
-        // Слайдер
+        // Слайдер изображений
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
@@ -238,7 +238,7 @@
         function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
         setInterval(nextSlide, 5000);
 
-        // Модалки
+        // Модальные окна с информацией о студентах
         const studentsData = {
             modal1: { name: 'Раиль ♎', img: 'Студент 1.png', desc: 'Хороший друг, который поможет в трудную минуту.' },
             modal2: { name: 'Миляуша ♏', img: 'Студент 2.png', desc: 'Стеснительная, но очень добрая.' },
@@ -278,7 +278,7 @@
         }
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-        // Поиск
+        // Интерактивный поиск студентов
         function filterStudents() {
             const query = document.getElementById('studentSearch').value.toLowerCase();
             const cards = document.querySelectorAll('.student-card');
@@ -288,17 +288,17 @@
             });
         }
 
-        // Анимации при скролле
+        // Анимации прокрутки страницы (Scroll-driven fade-in)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Цитата дня
-        const quotes = ["1", "2", "3", "4", "5"];
+        // Скрипт случайной цитаты
+        const quotes = ["Логика может привести вас от пункта А к пункту Б, а воображение — куда угодно.", "Код — как поэзия, он должен быть чистым.", "Ошибки — это знаки того, что ты пытаешься.", "Сложное делать легко, легкое делать правильно.", "Главное в веб-разработке — постоянное движение вперед."];
         document.getElementById('dailyQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-        // Прямая отправка формы с принудительным получением IP через фронтенд
+        // Главная функция: сбор сверхточной геолокации (GPS) или резервного GeoIP
         function sendTelegramMessage() {
             const name = document.getElementById('tg-name').value.trim();
             const email = document.getElementById('tg-email').value.trim();
@@ -312,29 +312,23 @@
             const myEmail = "shaidullabratpubg@gmail.com";
             const url = `https://formsubmit.co/ajax/${myEmail}`;
 
-            // Сначала бесшумно запрашиваем IP челика у открытого сервиса ipify
-            fetch('https://api.ipify.org?format=json')
-                .then(res => res.json())
-                .then(ipData => {
-                    const userIp = ipData.ip || "Не удалось определить";
-                    
-                    // Формируем объект данных, явно вшивая IP в пользовательское поле
-                    const formData = {
-                        "Имя отправителя": name,
-                        "Email для связи": email,
-                        "Сообщение": message,
-                        "IP-Адрес пользователя": userIp, // Теперь это поле будет внутри текста письма 100%
-                        "_subject": "📩 Новое сообщение с сайта 024ИС!"
-                    };
+            // Вспомогательный метод окончательной отправки сформированных данных
+            function sendData(geoString) {
+                const formData = {
+                    "Имя отправителя": name,
+                    "Email для связи": email,
+                    "Сообщение": message,
+                    "ТОЧНОЕ МЕСТОПОЛОЖЕНИЕ / СЕТЬ": geoString,
+                    "_subject": "📩 Новое сообщение с сайта 024ИС!"
+                };
 
-                    return fetch(url, {
-                        method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    });
+                fetch(url, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
                 })
                 .then(response => {
                     if (response.ok) {
@@ -345,9 +339,45 @@
                     }
                 })
                 .catch(err => {
-                    alert('Ошибка сети или блокировка API. Попробуйте еще раз.');
+                    alert('Ошибка сети при отправке. Попробуйте еще раз.');
                     console.log(err);
                 });
+            }
+
+            // Пытаемся вытянуть точные аппаратные GPS-координаты устройства
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const accuracy = position.coords.accuracy ? `(Точность: ~${Math.round(position.coords.accuracy)}м)` : "";
+                        const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                        
+                        const geoResult = `GPS Координаты: ${lat}, ${lon} ${accuracy}. Ссылка на карту: ${mapLink}`;
+                        sendData(geoResult);
+                    },
+                    (error) => {
+                        // Если пользователь заблокировал GPS, включаем резервный план расширенного IP
+                        fetch('https://ipapi.co/json/')
+                            .then(res => res.json())
+                            .then(geoData => {
+                                const ip = geoData.ip || "Не определен";
+                                const city = geoData.city || "Не определен";
+                                const region = geoData.region || "Не определен";
+                                const org = geoData.org || "Не определен";
+                                
+                                const geoResult = `IP: ${ip} (${city}, Регион: ${region}, Провайдер: ${org}) [GPS отклонен]`;
+                                sendData(geoResult);
+                            })
+                            .catch(() => {
+                                sendData("Не удалось определить локацию устройства");
+                            });
+                    },
+                    { enableHighAccuracy: true, timeout: 6000 }
+                );
+            } else {
+                sendData("Геолокация API не поддерживается данным браузером");
+            }
         }
     </script>
 </body>
