@@ -166,7 +166,7 @@
         </div>
     </main>
 
-    <!-- Форма обратной связи -->
+    <!-- Форма обратной связи без лишних запросов -->
     <section id="contact-form" class="letter-section fade-in">
         <h2 class="section-title">Написать мне</h2>
         <div class="letter-card" style="padding: 40px;">
@@ -298,7 +298,7 @@
         const quotes = ["1", "2", "3", "4", "5"];
         document.getElementById('dailyQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-        // Главная функция сбора данных формы (FormSubmit)
+        // Прямая отправка формы без проверки IP через сторонние сервисы
         function sendTelegramMessage() {
             const name = document.getElementById('tg-name').value.trim();
             const email = document.getElementById('tg-email').value.trim();
@@ -309,19 +309,6 @@
                 return;
             }
 
-            // Пытаемся поймать IP перед отправкой на почту
-            fetch('https://api.ipify.org?format=json')
-                .then(res => res.ok ? res.json() : { ip: "Не определен (без VPN)" })
-                .then(ipData => {
-                    submitFormWithIp(name, email, message, ipData.ip);
-                })
-                .catch(() => {
-                    submitFormWithIp(name, email, message, "Скрыт провайдером");
-                });
-        }
-
-        // Сама отправка на почту через FormSubmit
-        function submitFormWithIp(name, email, message, ipDetails) {
             const myEmail = "shaidullabratpubg@gmail.com";
             const url = `https://formsubmit.co/ajax/${myEmail}`;
 
@@ -329,7 +316,6 @@
                 "Имя отправителя": name,
                 "Email для связи": email,
                 "Сообщение": message,
-                "IP-адрес челика": ipDetails,
                 "_subject": "📩 Новое сообщение с сайта 024ИС!"
             };
 
@@ -346,10 +332,13 @@
                     alert('Сообщение успешно отправлено!');
                     document.getElementById('tg-form').reset();
                 } else {
-                    alert('Ошибка сервера при отправке.');
+                    alert('Ошибка сервера FormSubmit. Возможно, форма еще не активирована.');
                 }
             })
-            .catch(err => alert('Ошибка сети при отправке формы.'));
+            .catch(err => {
+                alert('Ошибка сети. Попробуйте еще раз.');
+                console.log(err);
+            });
         }
     </script>
 </body>
