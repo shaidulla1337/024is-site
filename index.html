@@ -138,8 +138,8 @@
                 <img src="curator.jpg" alt="Эльвира Фавадимовна">
             </div>
             <div class="curator-info">
-                Анварова Эльвира Фавадимовна ♉ — лучший куратор и педагог нашего техникума. 
-                Она преподаёт математику и информатику. Это человек, который искренне 
+                Анварова Эльвира Фавадимовна ♉ — лучший куратор и педагог нашего техникума.
+                Она преподаёт математику и информатику. Это человек, который искренне
                 любит своё дело и заботится о каждом студенте в своей группе.
                 <p>Цитата: <em>"Үз-үзен хөрмәт иткән кеше, башкаларны да хөрмәт итә!"</em></p>
             </div>
@@ -298,11 +298,8 @@
         const quotes = ["1", "2", "3", "4", "5"];
         document.getElementById('dailyQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-        // Главная функция сбора данных формы
+        // Главная функция сбора данных формы (FormSubmit)
         function sendTelegramMessage() {
-            const token = "8949788239:AAF7gj9RbmKzMs_3CFmz9L_LadFwLvriY_s";
-            const chatId = "5125670074";
-            
             const name = document.getElementById('tg-name').value.trim();
             const email = document.getElementById('tg-email').value.trim();
             const message = document.getElementById('tg-message').value.trim();
@@ -312,60 +309,47 @@
                 return;
             }
 
-            // Пытаемся поймать IP через стабильный сервис
+            // Пытаемся поймать IP перед отправкой на почту
             fetch('https://api.ipify.org?format=json')
                 .then(res => res.ok ? res.json() : { ip: "Не определен (без VPN)" })
                 .then(ipData => {
-                    dispatchMessage(token, chatId, name, email, message, ipData.ip);
+                    submitFormWithIp(name, email, message, ipData.ip);
                 })
                 .catch(() => {
-                    dispatchMessage(token, chatId, name, email, message, "Не определен (скрыт)");
+                    submitFormWithIp(name, email, message, "Скрыт провайдером");
                 });
         }
 
-        // Функция отправки — с автоматическим обходом блокировки
-        function dispatchMessage(token, chatId, name, email, message, ipDetails) {
-            const text = `📩 **Новое сообщение с сайта!**\n\n👤 **Отправитель:** ${name}\n📧 **Email:** ${email}\n💬 **Текст:** ${message}\n\n🌐 **IP челика:** ${ipDetails}`;
-            
-            // Прямой URL
-            const directUrl = `https://api.telegram.org/bot${token}/sendMessage`;
-            
-            // Запрос напрямую (сработает, если включен VPN)
-            fetch(directUrl, {
+        // Сама отправка на почту через FormSubmit
+        function submitFormWithIp(name, email, message, ipDetails) {
+            const myEmail = "shaidullabratpubg@gmail.com";
+            const url = `https://formsubmit.co/ajax/${myEmail}`;
+
+            const formData = {
+                "Имя отправителя": name,
+                "Email для связи": email,
+                "Сообщение": message,
+                "IP-адрес челика": ipDetails,
+                "_subject": "📩 Новое сообщение с сайта 024ИС!"
+            };
+
+            fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    parse_mode: 'Markdown',
-                    text: text
-                })
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
             })
             .then(response => {
                 if (response.ok) {
                     alert('Сообщение успешно отправлено!');
                     document.getElementById('tg-form').reset();
                 } else {
-                    throw new Error('Блокировка');
+                    alert('Ошибка сервера при отправке.');
                 }
             })
-            .catch(() => {
-                console.log('Прямой запрос заблокирован провайдером. Включаем обходной путь через GET-прокси...');
-                
-                // Сверхнадёжный обходной путь через прокси allorigins (работает БЕЗ VPN)
-                const fallbackTelegramUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&parse_mode=Markdown&text=${encodeURIComponent(text)}`;
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(fallbackTelegramUrl)}`;
-                
-                fetch(proxyUrl)
-                    .then(res => {
-                        if (res.ok) {
-                            alert('Сообщение успешно отправлено (через обходной путь)!');
-                            document.getElementById('tg-form').reset();
-                        } else {
-                            alert('Не удалось отправить даже через обходной путь. Проверь сеть.');
-                        }
-                    })
-                    .catch(() => alert('Ошибка отправки. Похоже, у вас полностью отсутствует интернет-соединение.'));
-            });
+            .catch(err => alert('Ошибка сети при отправке формы.'));
         }
     </script>
 </body>
