@@ -6,155 +6,206 @@
     <link rel="stylesheet" href="style.css">
     <title>024ИС - Выпускной Альбом</title>
     <style>
-        /* Стили для 3D Книги-Альбома */
-        .album-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-            perspective: 1500px; /* Эффект глубины 3D */
-            padding: 40px 0;
-            overflow: hidden;
+        /* Стиль премиального печатного фотоальбома */
+        body {
+            background-color: #f4f4f7;
+            margin: 0;
+            padding: 0;
         }
 
-        .book {
-            position: relative;
-            width: 450px;
-            height: 600px;
-            transition: transform 0.5s;
-            transform-style: preserve-3d;
-        }
-
-        /* Центрирование книги при открытии */
-        .book.opened {
-            transform: translateX(50%);
-        }
-
-        .page {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            transform-origin: left center;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .page-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            padding: 30px;
-            box-sizing: border-box;
+        .album-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 0 15px 15px 0;
-            box-shadow: inset 3px 0 10px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.15);
-            background: #fbfbfb;
-            color: #333;
+            gap: 60px;
         }
 
-        /* Обратная сторона страницы (смотрит влево при перевороте) */
-        .page-back {
-            transform: rotateY(180deg);
-            border-radius: 15px 0 0 15px;
-            box-shadow: inset -3px 0 10px rgba(0,0,0,0.1), -5px 5px 15px rgba(0,0,0,0.15);
-        }
-
-        /* Состояние перевернутой страницы */
-        .page.flipped {
-            transform: rotateY(-180deg);
-        }
-
-        /* Обложка (первая и последняя страницы) */
-        .cover-front {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            border-radius: 0 15px 15px 0;
-        }
-        .cover-back-end {
-            background: linear-gradient(135deg, #3498db, #2c3e50);
-            color: white;
-            border-radius: 15px 0 0 15px;
-        }
-
-        /* Внутреннее оформление контента */
-        .album-title {
-            font-size: 2rem;
-            text-align: center;
-            margin-top: 40px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .student-photo-frame {
-            width: 250px;
-            height: 280px;
-            border-radius: 10px;
+        /* Каждый разворот как разворот книги */
+        .album-spread {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 650px;
             overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-            border: 5px solid white;
-            margin-top: 20px;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
         }
 
-        .student-photo-frame img {
+        /* Эффект сгиба книги по центру */
+        .album-spread::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.15), rgba(0,0,0,0.02), rgba(255,255,255,0.1), rgba(0,0,0,0.15));
+            z-index: 10;
+        }
+
+        .spread-side {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Тёмный неоновый разворот в стиле "THE BEST" */
+        .spread-dark {
+            background: #11141a;
+            color: #ffffff;
+        }
+
+        /* Обложка альбома */
+        .album-cover {
+            grid-template-columns: 1fr;
+            text-align: center;
+            background: #ffffff;
+            padding: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: auto;
+        }
+        
+        .cover-photo-wrap {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        .cover-photo-wrap img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .album-info {
-            text-align: center;
+        .cover-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin: 0;
+            color: #1a1a1a;
+        }
+
+        /* Элементы разворотов */
+        .large-portrait {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .large-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .spread-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+
+        /* Коллажная сетка студентов (по 2 или 4 на страницу) */
+        .collage-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
             width: 100%;
         }
 
-        .album-name {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .album-quote {
-            font-style: italic;
-            color: #555;
+        .collage-item {
+            background: #f8f9fa;
+            border-radius: 12px;
             padding: 15px;
-            background: rgba(0,0,0,0.03);
-            border-left: 4px solid #3498db;
-            border-radius: 4px;
-            font-size: 1rem;
-            line-height: 1.4;
-            max-width: 90%;
-            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.2s;
+        }
+        .collage-item:hover {
+            transform: translateY(-4px);
         }
 
-        .hint-text {
+        .spread-dark .collage-item {
+            background: #1c2029;
+        }
+
+        .collage-img {
+            width: 100%;
+            height: 220px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .student-meta {
+            text-align: left;
+        }
+
+        .student-name-style {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .student-quote-style {
             font-size: 0.9rem;
-            opacity: 0.6;
-            animation: pulse 2s infinite;
+            opacity: 0.7;
+            font-style: italic;
+            line-height: 1.3;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.4; }
-            50% { opacity: 0.9; }
-            100% { opacity: 0.4; }
+        /* Маркерные кастомные надписи а-ля "THE BEST" / "SCHOOL" */
+        .marker-text {
+            font-family: 'Courier New', Courier, monospace; /* замена под граффити/маркер */
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #9b5de5;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            margin-top: 15px;
         }
 
-        /* Адаптация под темную тему */
-        [data-theme="dark"] .page-face:not(.cover-front):not(.cover-back-end) {
-            background: #1e2530;
-            color: #f5f5f5;
-            box-shadow: inset 3px 0 10px rgba(0,0,0,0.3), 5px 5px 15px rgba(0,0,0,0.4);
+        .marker-text.cyan { color: #00bbf9; }
+
+        /* Адаптивность для мобилок (разворачивается в одну колонку) */
+        @media (max-width: 850px) {
+            .album-spread {
+                grid-template-columns: 1fr;
+            }
+            .album-spread::before {
+                display: none;
+            }
+            .large-portrait {
+                min-height: 350px;
+            }
         }
-        [data-theme="dark"] .album-name { color: #3498db; }
-        [data-theme="dark"] .album-quote { color: #ccc; background: rgba(255,255,255,0.05); }
+
+        /* Интеграция с темной темой сайта */
+        [data-theme="dark"] body { background-color: #0e1117; }
+        [data-theme="dark"] .album-spread:not(.spread-dark) {
+            background: #161b22;
+            color: #ffffff;
+            border-color: rgba(255,255,255,0.05);
+        }
+        [data-theme="dark"] .album-spread:not(.spread-dark) .collage-item {
+            background: #21262d;
+        }
+        [data-theme="dark"] .cover-title { color: #ffffff; }
     </style>
 </head>
 <body>
@@ -171,284 +222,248 @@
         </div>
     </header>
 
-    <main class="container">
-        <h2 class="section-title" style="margin-top: 30px;">Выпускной Альбом Группы 024ИС</h2>
-        <p style="text-align: center; color: var(--text-muted); margin-bottom: -10px;">Нажимай на страницы, чтобы листать книгу</p>
+    <main class="album-container">
 
-        <section class="album-section">
-            <div class="book" id="albumBook">
-                
-                <!-- СТРАНИЦА 1: ОБЛОЖКА -->
-                <div class="page" style="z-index: 10;" onclick="flipPage(this, true)">
-                    <div class="page-face cover-front">
-                        <div class="album-title">ВЫПУСКНОЙ<br>АЛЬБОМ</div>
-                        <div style="font-size: 5rem;">🎓</div>
-                        <div class="album-info" style="margin-bottom: 20px;">
-                            <h3>Группа 024ИС</h3>
-                            <p>Выпуск 2026</p>
-                        </div>
-                        <div class="hint-text">Открыть альбом →</div>
-                    </div>
-                    <div class="page-face page-back">
-                        <!-- Левый разворот после обложки: Наш любимый староста -->
-                        <div class="album-title" style="font-size: 1.3rem;">Наш Староста</div>
-                        <div class="student-photo-frame">
-                            <img src="Студент 13.png" alt="Ильдар">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Ильдар ♈</div>
-                            <p class="album-quote">"Хороший друг и лучший староста группы."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 2: РАИЛЬ И МИЛЯУША -->
-                <div class="page" style="z-index: 9;" onclick="flipPage(this)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 1.png" alt="Раиль">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Раиль ♎</div>
-                            <p class="album-quote">"Хороший друг, который всегда поможет в трудную минуту."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back">
-                        <div class="student-photo-frame">
-                            <img src="Студент 2.png" alt="Миляуша" onerror="this.src='default-avatar.png'">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Миляуша ♏</div>
-                            <p class="album-quote">"Стеснительная, но очень добрая и отзывчивая."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 3: ИЛЬНАЗ И ДАНИЯР -->
-                <div class="page" style="z-index: 8;" onclick="flipPage(this)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 3.png" alt="Ильназ">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Ильназ</div>
-                            <p class="album-quote">"Сонный, но всегда на высоте, когда это действительно нужно."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back">
-                        <div class="student-photo-frame">
-                            <img src="Студент 4.png" alt="Данияр">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Данияр ♈</div>
-                            <p class="album-quote">"Крутой, надёжный и уверенный в себе парень."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 4: РАМИС И АЛЬМИР -->
-                <div class="page" style="z-index: 7;" onclick="flipPage(this)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 5.png" alt="Рамис">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Рамис ♓</div>
-                            <p class="album-quote">"Самый смешной в группе — с ним никогда не бывает скучно!"</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back">
-                        <div class="student-photo-frame">
-                            <img src="Студент 6.png" alt="Альмир">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Альмир ♋</div>
-                            <p class="album-quote">"Энергичный, весёлый и всегда полный новых идей."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 5: РЕНАЛЬ И РЕЗЕДА -->
-                <div class="page" style="z-index: 6;" onclick="flipPage(this)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 8.png" alt="Реналь">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Реналь ♍</div>
-                            <p class="album-quote">"Хороший собеседник, отличный слушатель и верный товарищ."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back">
-                        <div class="student-photo-frame">
-                            <img src="Студент 7.png" alt="Резеда">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Резеда ♍</div>
-                            <p class="album-quote">"Капкан."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 6: ГАМИЛЬ (ЛЕГЕНДА) И ИЛЬСИЯР -->
-                <div class="page" style="z-index: 5;" onclick="flipPage(this)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 12.png" alt="Гамиль">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Гамиль ♊</div>
-                            <p class="album-quote" style="border-left-color: #e74c3c; font-weight: bold;">"Легенда группы 024ИС в прямом смысле!"</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back">
-                        <div class="student-photo-frame">
-                            <img src="Студент 9.png" alt="Ильсияр">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Ильсияр ♍</div>
-                            <p class="album-quote">"Агрессивная? 100%!"</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 7: ДЕНИС И АРТЁМ -->
-                <div class="page" style="z-index: 4;" onclick="flipPage(this)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 10.png" alt="Денис">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Денис ♊</div>
-                            <p class="album-quote">"Спокойный, уравновешенный и надёжный товарищ."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back">
-                        <div class="student-photo-frame">
-                            <img src="Студент 11.png" alt="Артём">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Артём ♊</div>
-                            <p class="album-quote">"Невероятно весёлый, активный и жизнерадостный."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 8: ИЛЬНАРА И АЛСУ -->
-                <div class="page" style="z-index: 3;" onclick="flipPage(this)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 14.png" alt="Ильнара">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Ильнара ♍</div>
-                            <p class="album-quote">"Глубокая творческая натура с тонким видением мира."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back">
-                        <div class="student-photo-frame">
-                            <img src="Студент 15.png" alt="Алсу">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Алсу ♊</div>
-                            <p class="album-quote">"Очень добрая, скромная и всегда приветливая."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 9: ТИМУР И РУЗИЛЬ -->
-                <div class="page" style="z-index: 2;" onclick="flipPage(this)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 16.png" alt="Тимур">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Тимур ♎</div>
-                            <p class="album-quote">"Спортивный, волевой и невероятно целеустремлённый."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back">
-                        <div class="student-photo-frame">
-                            <img src="Студент 17.png" alt="Рузиль">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Рузиль ♐</div>
-                            <p class="album-quote">"Максимально уверенный в себе, сильный и смелый."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-
-                <!-- СТРАНИЦА 10: РЕГИНА И ЗАДНЯЯ ОБЛОЖКА -->
-                <div class="page" style="z-index: 1;" onclick="flipPage(this, false, true)">
-                    <div class="page-face">
-                        <div class="student-photo-frame">
-                            <img src="Студент 18.png" alt="Регина">
-                        </div>
-                        <div class="album-info">
-                            <div class="album-name">Регина ♋</div>
-                            <p class="album-quote">"Умная, начитанная и всегда готовая поддержать беседу."</p>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div class="page-face page-back cover-back-end">
-                        <div class="album-title">КОНЕЦ</div>
-                        <div style="font-size: 4rem;">✨</div>
-                        <p style="text-align: center; padding: 0 20px; font-size: 1.1rem;">Это были незабываемые годы вместе. Удачи каждому в будущем!</p>
-                        <div class="hint-text">← Листать назад</div>
-                    </div>
-                </div>
-
+        <!-- РАЗВОР ОТ 0: ОБЛОЖКА (Стиль Минимализм 2024) -->
+        <div class="album-spread album-cover">
+            <div class="cover-photo-wrap">
+                <img src="ФОТО ГЛАВ.jpg" alt="Групповое фото 024ИС">
             </div>
-        </section>
+            <h1 class="cover-title">ВЫПУСКНОЙ АЛЬБОМ</h1>
+            <p style="font-size: 1.3rem; letter-spacing: 4px; color: var(--primary); margin: 10px 0 0 0; font-weight: bold;">ГРУППА 024ИС • 2026</p>
+        </div>
+
+
+        <!-- РАЗВОР ОТ 1: КУРАТОР (Стиль Кадетского альбома — Крупный портрет + Инфо) -->
+        <div class="album-spread">
+            <!-- Левая страница разворота -->
+            <div class="spread-side" style="padding: 20px;">
+                <div class="large-portrait">
+                    <img src="curator.jpg" alt="Анварова Эльвира Фавадимовна">
+                </div>
+            </div>
+            <!-- Правая страница разворота -->
+            <div class="spread-side">
+                <span style="text-transform: uppercase; letter-spacing: 3px; font-weight: bold; color: var(--primary); font-size: 0.9rem;">Наш Наставник</span>
+                <h2 class="spread-title" style="margin-top: 5px; font-size: 2.2rem;">Эльвира Фавадимовна</h2>
+                <p style="font-size: 1.1rem; line-height: 1.6; opacity: 0.9;">
+                    Преподаватель математики и информатики, а главное — самый понимающий, надёжный и любимый куратор нашей группы. Человек, который мотивирует нас двигаться вперёд и верит в каждого программиста.
+                </p>
+                <div style="margin-top: 20px; font-style: italic; border-left: 4px solid var(--primary); padding-left: 15px; font-size: 1.05rem;">
+                    "Үз-үзен хөрмәт иткән кеше, башкаларны да хөрмәт итә!"
+                </div>
+                <div class="marker-text">THE BEST CURATOR</div>
+            </div>
+        </div>
+
+
+        <!-- РАЗВОР ОТ 2: ЛЕГЕНДЫ ГРУППЫ (Стиль Тёмный неоновый журнал "SCHOOL / THE BEST") -->
+        <div class="album-spread spread-dark">
+            <!-- Левая страница: Гамиль и Ильдар -->
+            <div class="spread-side">
+                <h2 class="spread-title">Лидеры & Легенды</h2>
+                <div class="collage-grid">
+                    <div class="collage-item">
+                        <img src="Студент 12.png" class="collage-img" alt="Гамиль">
+                        <div class="student-meta">
+                            <div class="student-name-style">Гамиль ♊</div>
+                            <div class="student-quote-style">Легенда группы 024ИС в прямом смысле!</div>
+                        </div>
+                    </div>
+                    <div class="collage-item">
+                        <img src="Студент 13.png" class="collage-img" alt="Ильдар">
+                        <div class="student-meta">
+                            <div class="student-name-style">Ильдар ♈</div>
+                            <div class="student-quote-style">Хороший друг и лучший староста группы.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="marker-text cyan">SCHOOL 024IS</div>
+            </div>
+            <!-- Правая страница: Коллаж парней -->
+            <div class="spread-side">
+                <div class="collage-grid">
+                    <div class="collage-item">
+                        <img src="Студент 1.png" class="collage-img" alt="Раиль">
+                        <div class="student-meta">
+                            <div class="student-name-style">Раиль ♎</div>
+                            <div class="student-quote-style">Всегда поможет в трудную минуту.</div>
+                        </div>
+                    </div>
+                    <div class="collage-item">
+                        <img src="Студент 4.png" class="collage-img" alt="Данияр">
+                        <div class="student-meta">
+                            <div class="student-name-style">Данияр ♈</div>
+                            <div class="student-quote-style">Крутой и уверенный в себе парень.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="marker-text" style="text-align: right; width: 100%;">THE BEST</div>
+            </div>
+        </div>
+
+
+        <!-- РАЗВОР ОТ 3: СВЕТЛЫЙ СТИЛЬНЫЙ КОЛЛАЖ (Студенты) -->
+        <div class="album-spread">
+            <!-- Левая страница -->
+            <div class="spread-side">
+                <h2 class="spread-title">Атмосфера группы</h2>
+                <div class="collage-grid">
+                    <div class="collage-item">
+                        <img src="Студент 2.png" class="collage-img" alt="Миляуша" onerror="this.src='default-avatar.png'">
+                        <div class="student-meta">
+                            <div class="student-name-style">Миляуша ♏</div>
+                            <div class="student-quote-style">Стеснительная, но очень добрая.</div>
+                        </div>
+                    </div>
+                    <div class="collage-item">
+                        <img src="Студент 3.png" class="collage-img" alt="Ильназ">
+                        <div class="student-meta">
+                            <div class="student-name-style">Ильназ</div>
+                            <div class="student-quote-style">Сонный, но всегда на высоте.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Правая страница -->
+            <div class="spread-side">
+                <div class="collage-grid">
+                    <div class="collage-item">
+                        <img src="Студент 5.png" class="collage-img" alt="Рамис">
+                        <div class="student-meta">
+                            <div class="student-name-style">Рамис ♓</div>
+                            <div class="student-quote-style">Смешной — с ним никогда не скучно!</div>
+                        </div>
+                    </div>
+                    <div class="collage-item">
+                        <img src="Студент 6.png" class="collage-img" alt="Альмир">
+                        <div class="student-meta">
+                            <div class="student-name-style">Альмир ♋</div>
+                            <div class="student-quote-style">Энергичный и полный новых идей.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- РАЗВОР ОТ 4: СТУДЕНТЫ (Продолжение) -->
+        <div class="album-spread spread-dark">
+            <div class="spread-side">
+                <div class="collage-grid">
+                    <div class="collage-item">
+                        <img src="Студент 8.png" class="collage-img" alt="Реналь">
+                        <div class="student-meta">
+                            <div class="student-name-style">Реналь ♍</div>
+                            <div class="student-quote-style">Хороший собеседник и слушатель.</div>
+                        </div>
+                    </div>
+                    <div class="collage-item">
+                        <img src="Студент 7.png" class="collage-img" alt="Резеда">
+                        <div class="student-meta">
+                            <div class="student-name-style">Резеда ♍</div>
+                            <div class="student-quote-style">Капкан.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spread-side">
+                <div class="collage-grid">
+                    <div class="collage-item">
+                        <img src="Студент 9.png" class="collage-img" alt="Ильсияр">
+                        <div class="student-meta">
+                            <div class="student-name-style">Ильсияр ♍</div>
+                            <div class="student-quote-style">Агрессивность на все 100%!</div>
+                        </div>
+                    </div>
+                    <div class="collage-item">
+                        <img src="Студент 10.png" class="collage-img" alt="Денис">
+                        <div class="student-meta">
+                            <div class="student-name-style">Денис ♊</div>
+                            <div class="student-quote-style">Спокойный и супер-надёжный.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- РАЗВОР ОТ 5: ЗАКЛЮЧИТЕЛЬНЫЙ -->
+        <div class="album-spread">
+            <div class="spread-side">
+                <div class="collage-grid">
+                    <div class="collage-item">
+                        <img src="Студент 11.png" class="collage-img" alt="Артём">
+                        <div class="student-meta">
+                            <div class="student-name-style">Артём ♊</div>
+                            <div class="student-quote-style">Весёлый и невероятно отзывчивый.</div>
+                        </div>
+                    </div>
+                    <div class="collage-item">
+                        <img src="Студент 14.png" class="collage-img" alt="Ильнара">
+                        <div class="student-meta">
+                            <div class="student-name-style">Ильнара ♍</div>
+                            <div class="student-quote-style">Глубокая творческая натура.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spread-side">
+                <div class="collage-grid">
+                    <div class="collage-item">
+                        <img src="Студент 15.png" class="collage-img" alt="Алсу">
+                        <div class="student-meta">
+                            <div class="student-name-style">Алсу ♊</div>
+                            <div class="student-quote-style">Добрая, скромная и приветливая.</div>
+                        </div>
+                    </div>
+                    <div class="collage-item">
+                        <img src="Студент 16.png" class="collage-img" alt="Тимур">
+                        <div class="student-meta">
+                            <div class="student-name-style">Тимур ♎</div>
+                            <div class="student-quote-style">Спортивный и целеустремленный.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- РАЗВОР ОТ 6: ФИНАЛЬНЫЙ С КЛАССНЫМИ СЛОВАМИ -->
+        <div class="album-spread spread-dark" style="min-height: 450px;">
+            <div class="spread-side" style="justify-content: center; align-items: center; text-align: center;">
+                <div class="collage-grid" style="grid-template-columns: 1fr;">
+                    <div class="collage-item" style="align-items: center;">
+                        <img src="Студент 17.png" class="collage-img" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover;" alt="Рузиль">
+                        <div class="student-meta" style="text-align: center;">
+                            <div class="student-name-style">Рузиль ♐</div>
+                            <div class="student-quote-style">Уверенный в себе и сильный.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spread-side" style="justify-content: center; align-items: center; text-align: center;">
+                <div class="collage-grid" style="grid-template-columns: 1fr;">
+                    <div class="collage-item" style="align-items: center;">
+                        <img src="Студент 18.png" class="collage-img" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover;" alt="Регина">
+                        <div class="student-meta" style="text-align: center;">
+                            <div class="student-name-style">Регина ♋</div>
+                            <div class="student-quote-style">Умная, начитанная и всегда поддержит.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer class="footer">
         <div class="footer-copyright">
-            <p>&copy; 2026 Группа 024ИС. Сделано с душой.</p>
+            <p>&copy; 2026 Группа 024ИС. Премиальный выпускной альбом.</p>
         </div>
     </footer>
 
     <script>
-        // Скрипт перелистывания страниц книги
-        function flipPage(pageElement, isFirstPage = false, isLastPage = false) {
-            const book = document.getElementById('albumBook');
-            
-            // Если страница уже перевернута — возвращаем назад
-            if (pageElement.classList.contains('flipped')) {
-                pageElement.classList.remove('flipped');
-                
-                // Если закрыли самую первую страницу, сдвигаем книгу обратно на центр
-                if (isFirstPage) {
-                    book.classList.remove('opened');
-                }
-            } else {
-                // Листаем вперед
-                pageElement.classList.add('flipped');
-                
-                // Если открыли первую страницу, сдвигаем книгу вправо, чтобы разворот встал по центру
-                if (isFirstPage) {
-                    book.classList.add('opened');
-                }
-            }
-        }
-
         // Переключение темной/светлой темы
         function toggleTheme() {
             const html = document.documentElement;
