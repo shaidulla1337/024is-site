@@ -325,29 +325,55 @@
         }
 
         // Запрос к Telegram
-        function dispatchMessage(token, chatId, name, email, message, ipDetails) {
-            const text = `📩 **Новое сообщение с сайта!**\n\n👤 **Отправитель:** ${name}\n📧 **Email:** ${email}\n💬 **Текст:** ${message}\n\n🌐 **IP челика:** ${ipDetails}`;
-            const url = `https://api.telegram.org/bot${token}/sendMessage`;
-            
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    parse_mode: 'Markdown',
-                    text: text
-                })
+       function dispatchMessage(token, chatId, name, email, message, ipDetails) {
+    const text = `📩 **Новое сообщение с сайта!**\n\n👤 **Отправитель:** ${name}\n📧 **Email:** ${email}\n💬 **Текст:** ${message}\n\n🌐 **IP челика:** ${ipDetails}`;
+    
+    // Обычный URL Телеграма
+    const directUrl = `https://api.telegram.org/bot${token}/sendMessage`;
+    // Резервный URL через бесплатный прокси для обхода блокировок
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(directUrl)}`;
+
+    const payload = {
+        chat_id: chatId,
+        parse_mode: 'Markdown',
+        text: text
+    };
+
+    // Сначала пробуем отправить напрямую
+    fetch(directUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Сообщение успешно отправлено в Telegram!');
+            document.getElementById('tg-form').reset();
+        } else {
+            throw new Error('Прямая отправка не удалась');
+        }
+    })
+    .catch(err => {
+        console.log('Прямой запрос заблокирован, включаем обходной путь через прокси...');
+        
+        // Если напрямую не вышло (выключен VPN), пускаем через прокси!
+        fetch(`${proxyUrl}&body_payload=${encodeURIComponent(JSON.stringify(payload))}`)
+            .then(res => {
+                // Через этот прокси отправляем методом POST на их лад, либо переделываем в GET-запрос для надежности:
+                const getFallbackUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&parse_mode=Markdown&text=${encodeURIComponent(text)}`;
+                return fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(getFallbackUrl)}`);
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Сообщение успешно отправлено в Telegram!');
+                    alert('Сообщение отправлено в Telegram (через обходной путь)!');
                     document.getElementById('tg-form').reset();
                 } else {
-                    alert('Ошибка при отправке в Telegram.');
+                    alert('Ошибка даже через прокси. Проверь настройки бота.');
                 }
             })
-            .catch(err => alert('Ошибка сети: ' + err));
-        }
+            .catch(proxyErr => alert('Ошибка сети: не удалось связаться с сервером.'));
+    });
+}
     </script>
 </body>
 </html>
